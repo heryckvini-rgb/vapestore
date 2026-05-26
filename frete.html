@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frete e Entregas - Vape Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cor-destaque: #00ff88;
+            --cor-fundo: #0a0a0a;
+            --cor-card: #141414;
+            --cor-texto: #ffffff;
+            --cor-subtexto: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            padding: 15px;
+            padding-bottom: 30px;
+        }
+
+        .frete-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            margin-bottom: 20px;
+        }
+        header h1 { font-size: 1.4rem; font-weight: 800; }
+        header h1 span { color: var(--cor-destaque); }
+
+        .alerta-envio {
+            background: linear-gradient(135deg, #111, #1a1a1a);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .alerta-envio strong { color: var(--cor-destaque); }
+
+        .titulo-secao {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Sistema de Seleção por Toque */
+        .lista-regioes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .regiao-item {
+            background: var(--cor-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        /* Estilo quando a região é selecionada */
+        .regiao-item.selecionada {
+            border-color: var(--cor-destaque);
+            background: rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+        }
+
+        .regiao-nome { font-weight: 600; display: block; }
+        .regiao-prazo { font-size: 0.75rem; color: var(--cor-subtexto); display: block; margin-top: 2px; }
+        .regiao-preco { font-weight: 700; color: var(--cor-destaque); }
+
+        /* Campo de Endereço Opcional */
+        .campo-endereco {
+            background: var(--cor-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .campo-endereco label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--cor-subtexto);
+            margin-bottom: 8px;
+        }
+        .campo-endereco input {
+            width: 100%;
+            background: #1c1c1c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .campo-endereco input:focus {
+            border-color: var(--cor-destaque);
+        }
+
+        /* Resumo de Valores */
+        .resumo-frete {
+            background: #111;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .linha-resumo {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--cor-subtexto);
+        }
+        .linha-resumo.total {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            border-top: 1px solid #222;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        /* Botão Confirmar */
+        .btn-confirmar {
+            display: block;
+            width: 100%;
+            background: #25d366;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+        .btn-confirmar:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="frete-container">
+        
+        <header>
+            <h1>VAPE <span>STORE</span></h1>
+        </header>
+
+        <div class="alerta-envio">
+            ⚡ Peça nas próximas <strong><span id="tempo-pedido">2h 45m</span></strong> para receber **Ainda Hoje**!
+        </div>
+
+        <div class="titulo-secao">📍 Passo 1: Selecione a sua Região</div>
+        
+        <div class="lista-regioes">
+            
+            <div class="regiao-item" onclick="selecionarRegiao(this, 'Plano Piloto / Sudoeste', 10.00)">
+                <div>
+                    <span class="regiao-nome">Plano Piloto / Sudoeste / Noroeste</span>
+                    <span class="regiao-prazo">Entrega via Motoboy • Até 3 horas</span>
+                </div>
+                <span class="regiao-preco">R$ 10,00</span>
+            </div>
+
+            <div class="regiao-item" onclick="selecionarRegiao(this, 'Águas Claras / Taguatinga', 15.00)">
+                <div>
+                    <span class="regiao-nome">Águas Claras / Taguatinga / V. Pires</span>
+                    <span class="regiao-prazo">Entrega via Motoboy • Até 4 horas</span>
+                </div>
+                <span class="regiao-preco">R$ 15,00</span>
+            </div>
+
+            <div class="regiao-item" onclick="selecionarRegiao(this, 'Guará / Cruzeiro', 12.00)">
+                <div>
+                    <span class="regiao-nome">Guará / Cruzeiro / Octogonal</span>
+                    <span class="regiao-prazo">Entrega via Motoboy • Até 3 horas</span>
+                </div>
+                <span class="regiao-preco">R$ 12,00</span>
+            </div>
+
+            <div class="regiao-item" onclick="selecionarRegiao(this, 'Ceilândia / Samambaia', 18.00)">
+                <div>
+                    <span class="regiao-nome">Ceilândia / Samambaia</span>
+                    <span class="regiao-prazo">Entrega via Motoboy • Mesmo Dia</span>
+                </div>
+                <span class="regiao-preco">R$ 18,00</span>
+            </div>
+
+        </div>
+
+        <div class="titulo-secao">🏠 Passo 2: Digite seu Endereço</div>
+        <div class="campo-endereco">
+            <label for="input-endereco">Rua, Quadra, Bloco, Número, Apartamento (Opcional)</label>
+            <input type="text" id="input-endereco" placeholder="Ex: Quadra 102, Bloco B, Apt 301" oninput="validarFormulario()">
+        </div>
+
+        <div class="resumo-frete">
+            <div class="linha-resumo">
+                <span>Região Selecionada:</span>
+                <span id="resumo-nome-regiao">Nenhuma</span>
+            </div>
+            <div class="linha-resumo">
+                <span>Taxa de Entrega:</span>
+                <span id="resumo-valor-frete">R$ 0,00</span>
+            </div>
+            <div class="linha-resumo total">
+                <span>Total do Frete:</span>
+                <span id="resumo-total">R$ 0,00</span>
+            </div>
+        </div>
+
+        <button id="btn-whatsapp" class="btn-confirmar" disabled onclick="enviarPedidoWhatsApp()">
+            Confirmar Local e Pedir 💬
+        </button>
+
+    </div>
+
+    <script>
+        let regiaoSelecionada = "";
+        let valorFreteSelecionado = 0;
+
+        function selecionarRegiao(elemento, nomeRegiao, valorFrete) {
+            // Remove classe selecionada de todos os itens
+            const itens = document.querySelectorAll('.regiao-item');
+            itens.forEach(item => item.classList.remove('selecionada'));
+
+            // Adiciona classe no item que foi clicado
+            elemento.classList.add('selecionada');
+
+            // Atualiza as variáveis globais
+            regiaoSelecionada = nomeRegiao;
+            valorFreteSelecionado = valorFrete;
+
+            // Altera o texto do resumo na tela
+            document.getElementById('resumo-nome-regiao').innerText = nomeRegiao;
+            document.getElementById('resumo-valor-frete').innerText = "R$ " + valorFrete.toFixed(2).replace('.', ',');
+            document.getElementById('resumo-total').innerText = "R$ " + valorFrete.toFixed(2).replace('.', ',');
+
+            validarFormulario();
+        }
+
+        function validarFormulario() {
+            const enderecoInput = document.getElementById('input-endereco').value.trim();
+            const btn = document.getElementById('btn-whatsapp');
+
+            // Só libera o botão de compra se tiver escolhido a região e digitado algo no endereço
+            if (regiaoSelecionada !== "" && enderecoInput.length > 3) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+        function enviarPedidoWhatsApp() {
+            const enderecoCompleto = document.getElementById('input-endereco').value.trim();
+            const numeroTelefone = "5599981551884"; 
+            
+            // Monta o texto pronto que vai chegar para você no WhatsApp
+            const textoMensagem = `Olá! Gostaria de fechar um pedido.\n\n` +
+                                 `📍 *Região:* ${regiaoSelecionada}\n` +
+                                 `🏠 *Endereço:* ${enderecoCompleto}\n` +
+                                 `🚚 *Taxa calculada:* R$ ${valorFreteSelecionado.toFixed(2).replace('.', ',')}`;
+
+            // Abre o WhatsApp com o texto formatado
+            const urlCalculada = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${encodeURIComponent(textoMensagem)}`;
+            window.open(urlCalculada, '_blank');
+        }
+
+        // Contador de urgência mobile
+        function atualizarContador() {
+            const agora = new Date();
+            const limite = new Date();
+            limite.setHours(18, 0, 0);
+
+            if (agora > limite) {
+                document.querySelector('.alerta-envio').innerHTML = "🌙 Pedidos feitos agora serão entregues <strong>Amanhã de Manhã</strong>!";
+                return;
+            }
+
+            const dif = limite - agora;
+            const horas = Math.floor(dif / (1000 * 60 * 60));
+            const minutos = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('tempo-pedido').innerText = `${horas}h ${minutos}m`;
+        }
+        setInterval(atualizarContador, 60000);
+        atualizarContador();
+    </script>
+</body>
+</html>
