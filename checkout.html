@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Pedido - Vape Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cor-destaque: #00ff88;
+            --cor-fundo: #0a0a0a;
+            --cor-card: #141414;
+            --cor-texto: #ffffff;
+            --cor-subtexto: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            padding: 15px;
+            padding-bottom: 40px;
+        }
+
+        .checkout-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Header Simplificado */
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            margin-bottom: 20px;
+        }
+        header h1 { font-size: 1.5rem; font-weight: 800; }
+        header h1 span { color: var(--cor-destaque); }
+
+        /* Card de Resumo */
+        .resumo-card {
+            background: var(--cor-card);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .resumo-titulo {
+            font-size: 0.9rem;
+            color: var(--cor-subtexto);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .item-linha {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .total-linha {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cor-destaque);
+        }
+
+        /* Abas de Pagamento */
+        .abas-pagamento {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .aba-btn {
+            flex: 1;
+            background: #1c1c1c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--cor-texto);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .aba-btn.ativa {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--cor-destaque);
+            color: var(--cor-destaque);
+        }
+
+        /* Conteúdo das Opções */
+        .conteudo-opcao {
+            background: var(--cor-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        /* Área do Pix */
+        .pix-instrucao {
+            font-size: 0.85rem;
+            color: var(--cor-subtexto);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .qr-code-placeholder {
+            width: 160px;
+            height: 160px;
+            background: white;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-code-placeholder img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Input Invisível para Cópia, mas Caixa Estilizada */
+        .caixa-copia {
+            background: #1c1c1c;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #ccc;
+            word-break: break-all;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Botões de Ação Principais */
+        .btn-acao {
+            display: block;
+            width: 100%;
+            background: var(--cor-destaque);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+        .btn-acao:active {
+            transform: scale(0.98);
+        }
+        .btn-wpp {
+            background: #25d366;
+            color: white;
+        }
+
+        /* Selos de Segurança */
+        .seguranca-selos {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            color: var(--cor-subtexto);
+            font-size: 0.75rem;
+        }
+        .selo-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        
+        <header>
+            <h1>VAPE <span>STORE</span></h1>
+        </header>
+
+        <div class="resumo-card">
+            <div class="resumo-titulo">Resumo do Pedido</div>
+            <div class="item-linha">
+                <span id="nome-produto">1x Pod Selecionado</span>
+                <span id="valor-produto">R$ --,--</span>
+            </div>
+            <div class="item-linha">
+                <span>Entrega (Brasília)</span>
+                <span style="color: var(--cor-destaque);">Grátis</span>
+            </div>
+            <div class="total-linha">
+                <span>Total:</span>
+                <span id="total-produto">R$ --,--</span>
+            </div>
+        </div>
+
+        <div class="abas-pagamento">
+            <button class="aba-btn ativa" onclick="mudarAba('pix')">⚡ PIX</button>
+            <button class="aba-btn" onclick="mudarAba('outros')">📱 Outros</button>
+        </div>
+
+        <div id="opcao-pix" class="conteudo-opcao">
+            <p class="pix-instrucao">Abra o app do seu banco, escolha a opção <strong>Pix Copia e Cola</strong></p>
+            <div class="caixa-copia" id="link-pix">
+                https://link.mercadopago.com.br/vapestoree
+            </div>
+
+            <button class="btn-acao" id="btn-copiar" onclick="copiarCodigoPix()">Copiar Código Pix</button>
+            <a href="https://api.whatsapp.com/send?phone=5599981551884&text=Olá!+Já+fiz+o+Pix+e+gostaria+de+enviar+o+comprovante." target="_blank" class="btn-acao btn-wpp">Já paguei, enviar comprovante 💬</a>
+        </div>
+
+        <div id="opcao-outros" class="conteudo-opcao" style="display: none;">
+            <p class="pix-instrucao" style="margin-bottom: 25px;"></p>
+            <a href="https://api.whatsapp.com/send?phone=5599981551884" target="_blank" class="btn-acao">Para tirar duvidas clique aqui</a>
+            <p style="font-size: 0.75rem; color: var(--cor-subtexto); margin-top: 10px;">Você será redirecionado para o ambiente seguro do Mercado Pago.</p>
+        </div>
+
+        <div class="seguranca-selos">
+            <div class="selo-item">🔒 Ambiente Seguro</div>
+            <div class="selo-item">⚡ Checkout Rápido</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Alternar entre as abas no celular
+        function mudarAba(tipo) {
+            const abaPix = document.getElementById('opcao-pix');
+            const abaOutros = document.getElementById('opcao-outros');
+            const botoes = document.querySelectorAll('.aba-btn');
+
+            botoes.forEach(btn => btn.classList.remove('ativa'));
+
+            if(tipo === 'pix') {
+                abaPix.style.display = 'block';
+                abaOutros.style.display = 'none';
+                botoes[0].classList.add('ativa');
+            } else {
+                abaPix.style.display = 'none';
+                abaOutros.style.display = 'block';
+                botoes[1].classList.add('ativa');
+            }
+        }
+
+        // Função Copiar Pix nativa para Mobile
+        function copiarCodigoPix() {
+            const textoCopia = document.getElementById('link-pix').innerText.trim();
+            const btn = document.getElementById('btn-copiar');
+
+            navigator.clipboard.writeText(textoCopia).then(() => {
+                btn.innerText = "✅ Código Copiado!";
+                btn.style.background = "#25d366";
+                btn.style.color = "#fff";
+                
+                setTimeout(() => {
+                    btn.innerText = "Copiar Código Pix";
+                    btn.style.background = "var(--cor-destaque)";
+                    btn.style.color = "#000";
+                }, 3000);
+            }).catch(err => {
+                alert("Erro ao copiar automaticamente. Selecione o texto e copie manualmente.");
+            });
+        }
+
+        // Pega parâmetros automáticos da URL (Exemplo: checkout.html?produto=Ignite%20V50&preco=45,00)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const produto = urlParams.get('produto');
+            const preco = urlParams.get('preco');
+
+            if (produto && preco) {
+                document.getElementById('nome-produto').innerText = "1x " + produto;
+                document.getElementById('valor-produto').innerText = "R$ " + preco;
+                document.getElementById('total-produto').innerText = "R$ " + preco;
+            } else {
+                // Valores padrão caso acesse a página direto
+                document.getElementById('nome-produto').innerText = "Dispositivo Premium";
+                document.getElementById('valor-produto').innerText = "R$ 70,00";
+                document.getElementById('total-produto').innerText = "R$ 70,00";
+            }
+        }
+    </script>
+</body>
+</html>
